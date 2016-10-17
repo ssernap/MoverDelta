@@ -15,15 +15,15 @@ for i=2:3:length(Th)-1
 A(i,:)=[0,0,0,0,(Th(i+1)-Th(i)),Th(i)];    
 end
 
-%Calculos de las Velocidades normalizadas intermedias
-VelNorm=zeros(1,length(Th));
-for i=2:3:length(VelNorm)-1 
+%Calculos de las Velocidades intermedias
+Velocidades=zeros(1,length(Th));
+for i=2:3:length(Velocidades)-1 
     if(i~=2)
-        VelNorm(i-1)=(VelNorm(i-1)+A(i,5))/2;
+        Velocidades(i-1)=(Velocidades(i-1)+A(i,5))/2;
     end
-    VelNorm(i)=A(i,5);
-    VelNorm(i+1)=A(i,5);
-    VelNorm(i+2)=A(i,5);
+    Velocidades(i)=A(i,5);
+    Velocidades(i+1)=A(i,5);
+    Velocidades(i+2)=A(i,5);
 end
 %%endVelocidades
 
@@ -42,12 +42,12 @@ for i=1:1:length(T)%recorre los tiempos del polinomio de grado 5
     if(mod(i-2,3)==0)
     else
     if(i==length(T))
-   R=[Th(i);VelNorm(i)/T(i-1);0;Th(i+1);0;0]; %vector respuesta final
+   R=[Th(i);(Th(i)-Th(i-1))/T(i-1);0;Th(i+1);0;0]; %vector respuesta final
    else
        if(i==1)
-           R=[Th(i);0;0;Th(i+1);VelNorm(i+1)/T(i+1);0]; %vector respuesta inicial
+           R=[Th(i);0;0;Th(i+1);(Th(i+2)-Th(i+1))/T(i+1);0]; %vector respuesta inicial
        else
-           R=[Th(i);VelNorm(i)/T(i-1);0;Th(i+1);VelNorm(i+1)/T(i+1);0]; %vector respuesta
+           R=[Th(i);(Th(i)-Th(i-1))/T(i-1);0;Th(i+1);(Th(i+2)-Th(i+1))/T(i+1);0]; %vector respuesta
        end
     end
    %Matriz de coefficientes

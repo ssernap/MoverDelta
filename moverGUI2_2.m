@@ -199,7 +199,7 @@ Px= tercios(Px1);
 Pz= tercios(Pz1);
 Py= tercios(Py1);
 
-Tiempo=(1:length(Px)-1)*0+0.1;
+Tiempo=(1:length(Px)-1)*0+0.01;
 
 %calculo de angulos
 [Th1(1),Th2(1), Th3(1)] =ArtiCinInv(Px(1), Py(1), Pz(1),0,0, 0);
@@ -268,7 +268,7 @@ Px= Cuartos(Px1);
 Pz= Cuartos(Pz1);
 Py= Cuartos(Py1);
 
-Tiempo=(1:length(Px)-1)*0+0.1;
+Tiempo=(1:length(Px)-1)*0+0.01;
 
 %calculo de angulos
 [Th1(1),Th2(1), Th3(1)] =ArtiCinInv(Px(1), Py(1), Pz(1),0,0, 0);
@@ -282,7 +282,7 @@ end
 Tiempo=SyncronizarTiemposCuartos(Th1,Tiempo);
 Tiempo=SyncronizarTiemposCuartos(Th2,Tiempo);
 Tiempo=SyncronizarTiemposCuartos(Th3,Tiempo);
-coordenadas=[Px',Py',Pz',Th1',Th2',Th3',Px',Px',[0,Tiempo]']
+coordenadas=[Px',Py',Pz',Th1',Th2',Th3',Px',Px',[0,Tiempo]'];
 
 h = handles.uitable1; %(outTable1 is the Tag of my uitable)
 %cnames = get(h,'ColumnName');
@@ -297,11 +297,24 @@ A3=CalculoPolinomiosCuartos(Th3,Tiempo);
  
     %Graficar
 function pushbuttonGraficar_Callback(hObject, eventdata, handles)
-global Tiempo A1 A2 A3
-    
-    TiempoAcu =[0,cumsum(Tiempo)];
+global Tiempo A1 A2 A3 coordenadas
+   
+
+Px1temp= rad2deg( coordenadas(:,4));
+Py1temp= rad2deg( coordenadas(:,5));
+Pz1temp= rad2deg( coordenadas(:,6));
+TiempoAcu =[0,cumsum(Tiempo)];
+for i=1:length(TiempoAcu)
+figure(1)
+hold all
+plot(TiempoAcu,Px1temp,'x');
+plot(TiempoAcu,Py1temp,'x');
+plot(TiempoAcu,Pz1temp,'x');
+end
+
 i=1;
 delta=0.01;
+
 for t=1:5000
     Time(t) = t/5000*TiempoAcu(end);
 while (Time(t)>TiempoAcu(i))
@@ -320,10 +333,10 @@ DesNorm=(TiempoAcu(i+1)-TiempoAcu(i));
 end
  TiempoAcu(end)
 figure(1)
-plot(Time,[rad2deg(ThetaM1)])
+plot(Time,rad2deg(ThetaM1))
 hold all
-plot(Time,[rad2deg(ThetaM2)])
-plot(Time,[rad2deg(ThetaM3)])
+plot(Time,rad2deg(ThetaM2))
+plot(Time,rad2deg(ThetaM3))
 grid on
 
     %Mover

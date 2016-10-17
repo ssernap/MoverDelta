@@ -43,7 +43,7 @@ end
 
 
 
-
+%TiempoAcu= [0,cumsum(T)]
 % for Cont=1:floor(TiempoAcu(end)*100)
 %     Time=Cont/100;
 %     i=1;
