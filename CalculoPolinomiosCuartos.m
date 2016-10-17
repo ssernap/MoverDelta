@@ -4,7 +4,7 @@ A=zeros(length(Th)-1,6);
 
 %Calculos de las velocidades constantes
 for i=2:3:length(Th)-1 
-A(i,:)=[0,0,0,0,(Th(i+2)-Th(i+1)),Th(i+1)];    
+A(i,:)=[0,0,0,0,(Th(i+1)-Th(i)),Th(i)];    
 end
 
 %Calculos de las Velocidades intermedias
@@ -48,7 +48,7 @@ for i = 1:1:length(Th)-1
 
 
 
-    A(i,:)=[A;(inv(M)*R)'];  
+    A(i,:)=[(inv(M)*R)'];  
 
     
     end
@@ -56,25 +56,32 @@ end
 
 
 
-
-% for Cont=1:floor(TiempoAcu(end)*100)
-%     Time=Cont/100;
-%     i=1;
-%     while (Time>TiempoAcu(i))
-%         i=i+1;
-%     end
-%     i=i-1;
-%     if(i==0)
-%         i=1;
-%     end
-%     
-%     
-%     
-%         DesNorm=(TiempoAcu(i+1)-TiempoAcu(i));    
-%         ThetaM1(Cont)=polyval(A(i,:),(Time-TiempoAcu(i))/DesNorm);
-%         ThetaM1P(Cont)=polyval(polyder(A(i,:)/DesNorm),(Time-TiempoAcu(i))/DesNorm);
-%         ThetaM1PP(Cont)=polyval(polyder(polyder(A(i,:)))/T(i)^2,(Time-TiempoAcu(i))/DesNorm);
-% end
+TiempoAcu= [0,cumsum(T)];
+for Cont=1:floor(TiempoAcu(end)*100)
+    Time=Cont/100;
+    i=1;
+    while (Time>TiempoAcu(i))
+        i=i+1;
+    end
+    i=i-1;
+    if(i==0)
+        i=1;
+    end
+    
+    
+    
+        DesNorm=(TiempoAcu(i+1)-TiempoAcu(i));    
+        Tiempo(Cont)=Time;
+        ThetaM1(Cont)=polyval(A(i,:),(Time-TiempoAcu(i))/DesNorm);
+        ThetaM1P(Cont)=polyval(polyder(A(i,:)/DesNorm),(Time-TiempoAcu(i))/DesNorm);
+        ThetaM1PP(Cont)=polyval(polyder(polyder(A(i,:)))/T(i)^2,(Time-TiempoAcu(i))/DesNorm);
+end
+figure(1)
+plot(Tiempo,ThetaM1);
+figure(2)
+plot(Tiempo,ThetaM1P);
+figure(3)
+plot(Tiempo,ThetaM1PP);
 
 end
 
