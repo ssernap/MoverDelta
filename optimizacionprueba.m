@@ -53,7 +53,11 @@ figure(4)
 hold all
 plot(cont,tfinalAct,'x')
 
-alph=alph*0.98;
+alph=abs((tfinalAct-tfinalprev)/tfinalprev*7)
+if(alph>0.5)
+    alph=0.4;
+end
+%alph=alph*0.98;
 cont=cont+1;
 
 end

@@ -1,6 +1,6 @@
 function T=SyncronizarTiemposCuartos2(Th,T,Vmax)
 %Vmax=deg2rad(150);%150
-Amax=deg2rad(800);%800
+Amax=deg2rad(700);%800
 
 % *%Definir tiempo para velocidad maxima en crucero*
 contadorVmax=1;

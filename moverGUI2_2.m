@@ -552,7 +552,9 @@ global HomeTH1 HomeTH2 HomeTH3
     function irlineal(PosDeseadaTH1,PosDeseadaTH2,PosDeseadaTH3)      
  
         error=100;
-        while(abs(error)>10)
+        cont=0;
+        while(abs(error)>10 && cont<10)
+            cont=cont+1;
     RegPosActual=36;    
     PosActTh1=(calllib('dynamixel','dxl_read_word',1,RegPosActual));% el -Deg2Digital(180) centra el home
     PosActTh2=(calllib('dynamixel','dxl_read_word',2,RegPosActual));
