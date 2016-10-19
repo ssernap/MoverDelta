@@ -1,4 +1,4 @@
-function A=CalculoPolinomiosCuartos(Th,T)
+function A=CalculoPolinomiosCuartos2(Th,T)
 
 A=zeros(length(Th)-1,6);
 
