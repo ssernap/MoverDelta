@@ -1,6 +1,6 @@
 function T=SyncronizarTiemposCuartos2(Th,T,Vmax)
 %Vmax=deg2rad(150);%150
-%calcula el tiempo minimo que respete estas velocidades y aceleraciones
+%calcula el tiempo minimo que respete estas velocidades
 
 
 Amax=deg2rad(700);%800

@@ -5,7 +5,7 @@ Angulos1 =Th1; %angulos objetivos
 Angulos2 =Th2;
 Angulos3 =Th3;
 size=length(Angulos1);
-X0=zeros(1,(size-1)/3)+2;   %velocidades Iniciales
+X0=zeros(1,(size-1)/3*2-1)+2;   %velocidades Iniciales
 
 
 %condiciones iniciales
@@ -13,13 +13,13 @@ camb=1;     %cambio del tiempo
 cont=1;     %contador
 alph=0.5;   %correccion del cambio en el gradiente (gradiente*alpha)
 delta=0.001;
-
+tic
 while(camb>0.001)
     Xtemp=X0;
     for j=1:(length(X0))    
         Vt1 = zeros(1,(size-1))+0.0001; %tiempos minimos
         Vt2 = zeros(1,(size-1))+0.0001; %tiempos minimos
-        X1=X0; X2=X0;  %inicializa vectores de velocidad
+        X1=Xtemp; X2=Xtemp;  %inicializa vectores de velocidad
         X1(j)=X1(j)-delta/2; %suma y resta para hacer un delta
         X2(j)=X2(j)+delta/2;
         
@@ -57,9 +57,12 @@ alph=abs((tfinalAct-tfinalprev)/tfinalprev*7)
 if(alph>0.5)
     alph=0.4;
 end
+if(alph<0.1)
+    alph=0.1;
+end
 %alph=alph*0.98;
 cont=cont+1;
 
 end
-
+tiempo=toc
 end
