@@ -5,7 +5,7 @@ Angulos1 =Th1; %angulos objetivos
 Angulos2 =Th2;
 Angulos3 =Th3;
 size=length(Angulos1);
-X0=zeros(1,(size-1)/3)+2;   %velocidades Iniciales
+VelIni0=zeros(1,(size-1)/3)+2;   %velocidades Iniciales
 
 
 %condiciones iniciales
@@ -15,39 +15,50 @@ alph=0.5;   %correccion del cambio en el gradiente (gradiente*alpha)
 delta=0.001;
 
 while(camb>0.001)
-    Xtemp=X0;
-    for j=1:(length(X0))    
-        Vt1 = zeros(1,(size-1))+0.0001; %tiempos minimos
-        Vt2 = zeros(1,(size-1))+0.0001; %tiempos minimos
-        X1=Xtemp; X2=Xtemp;  %inicializa vectores de velocidad
-        X1(j)=X1(j)-delta/2; %suma y resta para hacer un delta
-        X2(j)=X2(j)+delta/2;
+    Veltemp=VelIni0;
+    for j=1:(length(VelIni0))    
+        %calcular velocidades intermedias
+        %pasarlas como vector
+        %hacer que alterne la optimizacion de velocidades y de velocidades
+        %intermedias
+        tiem1 = zeros(1,(size-1))+0.0001; %tiempos minimos
+        tiem2 = zeros(1,(size-1))+0.0001; %tiempos minimos
+        VelDelta1=Veltemp; VelDelta2=Veltemp;  %inicializa vectores de velocidad
+        VelDelta1(j)=VelDelta1(j)-delta/2; %suma y resta para hacer un delta
+        VelDelta2(j)=VelDelta2(j)+delta/2;
         
-        Vt1=SyncronizarTiemposCuartos2(Angulos1,Vt1,X1);%obtiene el vector de tiempos
-        Vt2=SyncronizarTiemposCuartos2(Angulos1,Vt2,X2);
-        Vt1=SyncronizarTiemposCuartos2(Angulos2,Vt1,X1);%obtiene el vector de tiempos
-        Vt2=SyncronizarTiemposCuartos2(Angulos2,Vt2,X2);
-        Vt1=SyncronizarTiemposCuartos2(Angulos3,Vt1,X1);%obtiene el vector de tiempos
-        Vt2=SyncronizarTiemposCuartos2(Angulos3,Vt2,X2);
+        tiem1=SyncronizarTiemposCuartos2(Angulos1,tiem1,VelDelta1);%obtiene el vector de tiempos
+        tiem2=SyncronizarTiemposCuartos2(Angulos1,tiem2,VelDelta2);
+        tiem1=SyncronizarTiemposCuartos2(Angulos2,tiem1,VelDelta1);%obtiene el vector de tiempos
+        tiem2=SyncronizarTiemposCuartos2(Angulos2,tiem2,VelDelta2);
+        tiem1=SyncronizarTiemposCuartos2(Angulos3,tiem1,VelDelta1);%obtiene el vector de tiempos
+        tiem2=SyncronizarTiemposCuartos2(Angulos3,tiem2,VelDelta2);
                
-        t1=Vt1((j-1)*3+1)*0.5+Vt1((j-1)*3+2)+Vt1((j-1)*3+3)*0.5; %tiempoACi*0.5+tiempoVcte+tiempoACf*0.5
-        t2=Vt2((j-1)*3+1)*0.5+Vt2((j-1)*3+2)+Vt2((j-1)*3+3)*0.5;
-
+        t1=cumsum(tiem1); %tiempoACi*0.5+tiempoVcte+tiempoACf*0.5
+        t2=cumsum(tiem2);
+        t1=t1(end);
+        t2=t2(end);
+        
         funp=-(t1-t2)/delta; %derivada
-        Xtemp(j)=Xtemp(j)+alph*-funp;
+        Veltemp(j)=Veltemp(j)+alph*-funp;
+        
+        % a modificar
+        % %si aumenta de valor, volver al anterior y tomarun paso mas
+        % peque;o.
+        
         
     end
     %tiempos finales
     tinicial=zeros(1,(size-1))+0.0001;
-    tfinalprev=cumsum(SyncronizarTiemposCuartos2(Angulos1,tinicial,X0));
-    T=SyncronizarTiemposCuartos2(Angulos1,tinicial,Xtemp);
+    tfinalprev=cumsum(SyncronizarTiemposCuartos2(Angulos1,tinicial,VelIni0));
+    T=SyncronizarTiemposCuartos2(Angulos1,tinicial,Veltemp);
     tfinalAct=cumsum(T);
     tfinalprev=tfinalprev(end);
     tfinalAct=tfinalAct(end);
     %actualiza X0
-    X0=Xtemp;
+    VelIni0=Veltemp;
 
-    camb=abs(tfinalAct-tfinalprev)/length(X0);
+    camb=abs(tfinalAct-tfinalprev)/length(VelIni0);
 
 figure(4)
 hold all
@@ -58,7 +69,7 @@ if(alph>0.5)
     alph=0.4;
 end
 if(alph<0.1)
-    alph=0.1;
+    alph=0.1*0.95^cont;
 end
 %alph=alph*0.98;
 cont=cont+1;

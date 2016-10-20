@@ -351,9 +351,9 @@ h = handles.uitable1; %(outTable1 is the Tag of my uitable)
 set(h,'Data',coordenadas);
 
 
-A1=CalculoPolinomiosCuartos(Th1,Tiempo);
-A2=CalculoPolinomiosCuartos(Th2,Tiempo);
-A3=CalculoPolinomiosCuartos(Th3,Tiempo);
+A1=CalculoPolinomiosCuartos2(Th1,Tiempo);
+A2=CalculoPolinomiosCuartos2(Th2,Tiempo);
+A3=CalculoPolinomiosCuartos2(Th3,Tiempo);
 
  TiempoAcu=[0,cumsum(Tiempo)]
 

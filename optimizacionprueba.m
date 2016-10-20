@@ -30,9 +30,11 @@ while(camb>0.001)
         Vt1=SyncronizarTiemposCuartos2(Angulos3,Vt1,X1);%obtiene el vector de tiempos
         Vt2=SyncronizarTiemposCuartos2(Angulos3,Vt2,X2);
                
-        t1=Vt1((j-1)*3+1)*0.5+Vt1((j-1)*3+2)+Vt1((j-1)*3+3)*0.5; %tiempoACi*0.5+tiempoVcte+tiempoACf*0.5
-        t2=Vt2((j-1)*3+1)*0.5+Vt2((j-1)*3+2)+Vt2((j-1)*3+3)*0.5;
-
+        t1=cumsum(Vt1); %tiempoACi*0.5+tiempoVcte+tiempoACf*0.5
+        t2=cumsum(Vt2);
+        t1=t1(end);
+        t2=t2(end);
+        
         funp=-(t1-t2)/delta; %derivada
         Xtemp(j)=Xtemp(j)+alph*-funp;
         
@@ -58,7 +60,7 @@ if(alph>0.5)
     alph=0.4;
 end
 if(alph<0.1)
-    alph=0.1;
+    alph=0.1*0.95^cont;
 end
 %alph=alph*0.98;
 cont=cont+1;

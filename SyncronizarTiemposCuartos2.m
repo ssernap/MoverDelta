@@ -21,11 +21,11 @@ end
 VelNorm=zeros(1,length(Th));
 for i=2:3:length(VelNorm)-1 
     if(i~=2)
-        VelNorm(i-1)=(VelNorm(i-1)+A(i,5))/2;
+        VelNorm(i-1)=(VelNorm(i-1)+A(i,5)/T(i))/2;
     end
-    VelNorm(i)=A(i,5);
-    VelNorm(i+1)=A(i,5);
-    VelNorm(i+2)=A(i,5);
+    VelNorm(i)=A(i,5)/T(i);
+    VelNorm(i+1)=A(i,5)/T(i);
+    VelNorm(i+2)=A(i,5)/T(i);
 end
 %%endVelocidades
 
@@ -44,12 +44,12 @@ for i=1:1:length(T)%recorre los tiempos del polinomio de grado 5
     if(mod(i-2,3)==0)
     else
     if(i==length(T))
-   R=[Th(i);VelNorm(i)/T(i-1);0;Th(i+1);0;0]; %vector respuesta final
+   R=[Th(i);VelNorm(i);0;Th(i+1);0;0]; %vector respuesta final
    else
        if(i==1)
-           R=[Th(i);0;0;Th(i+1);VelNorm(i+1)/T(i+1);0]; %vector respuesta inicial
+           R=[Th(i);0;0;Th(i+1);VelNorm(i+1);0]; %vector respuesta inicial
        else
-           R=[Th(i);VelNorm(i)/T(i-1);0;Th(i+1);VelNorm(i+1)/T(i+1);0]; %vector respuesta
+           R=[Th(i);VelNorm(i);0;Th(i+1);VelNorm(i+1);0]; %vector respuesta
        end
     end
    %Matriz de coefficientes
