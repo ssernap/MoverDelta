@@ -2,6 +2,7 @@ function T=SyncronizarTiemposCuartos2(Th,T1,Vmax)
 
 Amax=deg2rad(700);%800
 
+
 % *%Definir tiempo para velocidad maxima en crucero*
 contadorVmax=1;
 for i=2:3:length(Th)-1 
@@ -36,19 +37,16 @@ end
 % *definir tiempo para aceleracion maxima en polinomio de grado 5*
 cambio=1;
 T=T1;
-cambioT = T+1;
- ciclos =0;
-while(cambio>0.001&&ciclos<50) %se sale cuando el tiempo no avance mas de 0.001 segundos
+while(cambio>0.001) %se sale cuando el tiempo no avance mas de 0.001 segundos
     tiempoInicial=cumsum(T);
-ciclos = ciclos+1;
-Tant =T;
+
+cambioT = T+1;   
     %aceleracion
-   
 for i=1:1:length(T)%recorre los tiempos del polinomio de grado 5    
-    
+    Tant =T;
     if(mod(i-2,3)==0)
     else
-        if(abs(cambioT(i))>0.000001 )
+        if(cambioT(i)~=0 )
             if(i==length(T))
                 R=[Th(i);VelNorm(i);0;Th(i+1);0;0]; %vector respuesta final
             else
@@ -89,12 +87,12 @@ end
 
      cambioT=T-Tant;
 Tiempofinal=cumsum(T);
-cambio=abs(tiempoInicial(end)-Tiempofinal(end)) %cambio total en el tiempo
+cambio=abs(tiempoInicial(end)-Tiempofinal(end)); %cambio total en el tiempo
 end
 for i=1:1:length(T)
-  T(i)=max(T(i),T1(i)); 
+%   T(i)=max(T(i),T1(i)); 
 end
-T
+
 %Vmax=deg2rad(150);%150
 % Amax=deg2rad(700);%800
 % 

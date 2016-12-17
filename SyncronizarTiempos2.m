@@ -34,7 +34,7 @@ for i=1:2:length(T)%recorre los tiempos del polinomio de grado 5
          5/T(i),  4/T(i),  3/T(i),  2/T(i),   1/T(i),   0;
         20/T(i)^2, 12/T(i)^2,  6/T(i)^2,  2/T(i)^2,   0,   0;
     ];
-     C=(inv(CC)*R)';
+     C=(CC\R)';
      
     k=roots(polyder(polyder(polyder(C))));%raices de la derivada de la aceleracion para encontrar maximos y minimos locales
     
