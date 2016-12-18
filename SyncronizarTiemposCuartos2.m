@@ -38,7 +38,7 @@ cambio=1;
 T=T1;
 cambioT = T+1;
  ciclos =0;
-while(cambio>0.001&&ciclos<50) %se sale cuando el tiempo no avance mas de 0.001 segundos
+while(cambio>0.001&&ciclos<10) %se sale cuando el tiempo no avance mas de 0.001 segundos
     tiempoInicial=cumsum(T);
 ciclos = ciclos+1;
 Tant =T;
@@ -89,7 +89,7 @@ end
 
      cambioT=T-Tant;
 Tiempofinal=cumsum(T);
-cambio=abs(tiempoInicial(end)-Tiempofinal(end)) %cambio total en el tiempo
+cambio=abs(tiempoInicial(end)-Tiempofinal(end)); %cambio total en el tiempo
 end
 for i=1:1:length(T)
   T(i)=max(T(i),T1(i)); 

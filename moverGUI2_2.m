@@ -376,6 +376,9 @@ hold all
 plot(TiempoAcu,Px1temp,'x');
 plot(TiempoAcu,Py1temp,'x');
 plot(TiempoAcu,Pz1temp,'x');
+
+
+
 end
 
 i=1;
@@ -403,6 +406,13 @@ plot(Time,rad2deg(ThetaM1))
 hold all
 plot(Time,rad2deg(ThetaM2))
 plot(Time,rad2deg(ThetaM3))
+
+figure(2);
+hold all
+plot(Time(1:end-1),diff(rad2deg(ThetaM3))/TiempoAcu(end)/5000);
+plot(Time(1:end-1),diff(rad2deg(ThetaM2))/TiempoAcu(end)/5000);
+plot(Time(1:end-1),diff(rad2deg(ThetaM1))/TiempoAcu(end)/5000);
+
 grid on
 
     %Mover

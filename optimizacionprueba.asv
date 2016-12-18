@@ -53,22 +53,38 @@ while(camb>0.001)
         t1a=t1a(end);
         t2a=t2a(end);
         funpa=-(t1a-t2a)/delta; %derivada
-        if(Xtempa(j))
-        Xtempa(j)=Xtempa(j)+alph*-funpa; 
+        if(abs(Xtempa(j)*0.1)>abs(alph*-funpa))
+           mover = alph*-funpa;
+        else
+            mover =sign(alph*-funpa)*Xtempa(j)*0.1;
+        end
+        Xtempa(j)=Xtempa(j)+mover; 
         
                 t1b=cumsum(Vt1b); %tiempoACi*0.5+tiempoVcte+tiempoACf*0.5
         t2b=cumsum(Vt2b);
         t1b=t1b(end);
         t2b=t2b(end);
         funpb=-(t1b-t2b)/delta; %derivada
-        Xtempb(j)=Xtempb(j)+alph*-funpb; 
+        
+        if(abs(Xtempb(j)*0.1)>abs(alph*-funpb))
+           mover = alph*-funpb;
+        else
+            mover =sign(alph*-funpb)*Xtempb(j)*0.1;
+        end
+        Xtempb(j)=Xtempb(j)+mover; 
         
                 t1c=cumsum(Vt1c); %tiempoACi*0.5+tiempoVcte+tiempoACf*0.5
         t2c=cumsum(Vt2c);
         t1c=t1c(end);
         t2c=t2c(end);
         funpc=-(t1c-t2c)/delta; %derivada
-        Xtempc(j)=Xtempc(j)+alph*-funpc; 
+        
+            if(abs(Xtempc(j)*0.1)>abs(alph*-funpc))
+           mover = alph*-funpc;
+        else
+            mover =sign(alph*-funpc)*Xtempc(j)*0.1;
+        end
+        Xtempc(j)=Xtempc(j)+mover; 
         
         
        
@@ -76,41 +92,48 @@ while(camb>0.001)
     end
     %tiempos finales
     tinicial=zeros(1,(size-1))+0.0001;
-    tfinalprev=cumsum(SyncronizarTiemposCuartos2(Angulos1,tinicial,X0a));
+   % tfinalprev=cumsum(SyncronizarTiemposCuartos2(Angulos1,tinicial,X0a));    
+    tfinalprev=max(SyncronizarTiemposCuartos2(Angulos1,tinicial,X0a),SyncronizarTiemposCuartos2(Angulos2,tinicial,X0b));
+    tfinalprev = max (tfinalprev,SyncronizarTiemposCuartos2(Angulos3,tinicial,X0c)); 
+    tfinalprev = cumsum(tfinalprev);
+   
+    
     T=max(SyncronizarTiemposCuartos2(Angulos1,tinicial,Xtempa),SyncronizarTiemposCuartos2(Angulos2,tinicial,Xtempb));
     T = max (T,SyncronizarTiemposCuartos2(Angulos3,tinicial,Xtempc));
     tfinalAct=cumsum(T);
     tfinalprev=tfinalprev(end);
     tfinalAct=tfinalAct(end);
     %actualiza X0
+   
+    camb=abs(tfinalAct-tfinalprev)/length(X0a);
+    if(tfinalAct<tfinalprev||cont==1)
     X0a=Xtempa;
     X0b=Xtempb;
-    X0c=Xtempc;
+    X0c=Xtempc;    
+    figure(4)
+    hold all
+    plot(cont,tfinalAct,'x','color','r')
 
+    alph=abs((tfinalAct-tfinalprev)/tfinalprev*7)
+    if(alph>0.5)
+        alph=0.4*0.95^cont;;
+    end
+    if(alph<0.1)
+        alph=0.1*0.95^cont;
+    end
+    %alph=alph*0.98;
+    cont=cont+1;
     
-    
-    
-    
-    
-    
-    camb=abs(tfinalAct-tfinalprev)/length(X0a);
+    else
+        %cont = cont -1;
+         alph =  alph *0.5;
+          plot(cont,tfinalAct,'x','color','b')
+    end
 
-figure(4)
-hold all
-plot(cont,tfinalAct,'x')
 
-alph=abs((tfinalAct-tfinalprev)/tfinalprev*7)
-if(alph>0.5)
-    alph=0.4;
+
 end
-if(alph<0.1)
-    alph=0.1*0.95^cont;
-end
-%alph=alph*0.98;
-cont=cont+1;
 
-end
-T = max(Vt)
 end
 
 

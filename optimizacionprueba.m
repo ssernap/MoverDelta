@@ -92,38 +92,46 @@ while(camb>0.001)
     end
     %tiempos finales
     tinicial=zeros(1,(size-1))+0.0001;
-    tfinalprev=cumsum(SyncronizarTiemposCuartos2(Angulos1,tinicial,X0a));
+   % tfinalprev=cumsum(SyncronizarTiemposCuartos2(Angulos1,tinicial,X0a));    
+    tfinalprev=max(SyncronizarTiemposCuartos2(Angulos1,tinicial,X0a),SyncronizarTiemposCuartos2(Angulos2,tinicial,X0b));
+    tfinalprev = max (tfinalprev,SyncronizarTiemposCuartos2(Angulos3,tinicial,X0c)); 
+    tfinalprev = cumsum(tfinalprev);
+   
+    
     T=max(SyncronizarTiemposCuartos2(Angulos1,tinicial,Xtempa),SyncronizarTiemposCuartos2(Angulos2,tinicial,Xtempb));
     T = max (T,SyncronizarTiemposCuartos2(Angulos3,tinicial,Xtempc));
     tfinalAct=cumsum(T);
     tfinalprev=tfinalprev(end);
     tfinalAct=tfinalAct(end);
     %actualiza X0
+   
+    camb=abs(tfinalAct-tfinalprev)/length(X0a);
+    if((tfinalAct-tfinalprev)/tfinalAct<0.03||cont==1)
     X0a=Xtempa;
     X0b=Xtempb;
-    X0c=Xtempc;
+    X0c=Xtempc;    
+    figure(4)
+    hold all
+    plot(cont,tfinalAct,'o','color','b')
+delta=0.005;
+    alph=abs((tfinalAct-tfinalprev)/tfinalprev*7)
+    if(alph>0.5)
+        alph=0.4*0.95^cont;;
+    end
+    if(alph<0.1)
+        alph=0.1*0.95^cont;
+    end
+    %alph=alph*0.98;
+    cont=cont+1;
+    
+    else
+        %cont = cont -1;
+        delta=0.001;
+         alph =  alph *0.5;
+          plot(cont,tfinalAct,'o','color','g')
+    end
 
-    
-    
-    
-    
-    
-    
-    camb=abs(tfinalAct-tfinalprev)/length(X0a);
 
-figure(4)
-hold all
-plot(cont,tfinalAct,'x')
-
-alph=abs((tfinalAct-tfinalprev)/tfinalprev*7)
-if(alph>0.5)
-    alph=0.4;
-end
-if(alph<0.1)
-    alph=0.1*0.95^cont;
-end
-%alph=alph*0.98;
-cont=cont+1;
 
 end
 
